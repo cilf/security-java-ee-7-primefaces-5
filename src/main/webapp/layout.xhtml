@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+        >
+
+<c:set var="isGuest" scope="request" value="#{securityBean.isGuest()}"/>
+<c:set var="isUser" scope="request" value="#{securityBean.isUser()}"/>
+<c:set var="isAdmin" scope="request" value="#{securityBean.isAdmin()}"/>
+
+<h:head>
+    <title>
+        <ui:insert name="title"/> | security-java-ee-7-primefaces-5
+    </title>
+</h:head>
+
+<h:body>
+
+    <h1>security-java-ee-7-primefaces-5</h1>
+
+    <h:panelGroup layout="block" id="content">
+
+        <h2><ui:insert name="title"/></h2>
+
+        <c:if test="${isGuest}">
+            <h3>You're Guest!</h3>
+        </c:if>
+        <c:if test="${isUser}">
+            <h3>You're User!</h3>
+        </c:if>
+        <c:if test="${isAdmin}">
+            <h3>You're Admin!</h3>
+        </c:if>
+        <hr/>
+        <c:if test="${isUser}">
+            User #{securityBean.loggedInUser.name} logged in.
+            <h:form>
+                <p:commandButton value="log out" actionListener="#{pageBean.logout()}" update=":content"/>
+            </h:form>
+            <hr/>
+        </c:if>
+        <c:if test="${isGuest}">
+            <h:form>
+                <h:messages/>
+                <h:outputLabel for="name" value="Name: "/>
+                <p:inputText id="name" value="#{pageBean.name}"/><br/>
+                <h:outputLabel for="pass" value="Password: "/>
+                <p:password id="pass" value="#{pageBean.password}"/><br/>
+                <p:commandButton value="log in" actionListener="#{pageBean.login()}" update=":content"/>
+            </h:form>
+            <hr/>
+        </c:if>
+    </h:panelGroup>
+
+    <ui:insert name="content"/>
+
+</h:body>
+</html>
